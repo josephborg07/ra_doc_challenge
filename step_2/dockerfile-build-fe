@@ -1,0 +1,14 @@
+FROM node:13.12.0-alpine as build
+WORKDIR /app
+ENV PATH /app/node_modules/.bin:$PATH
+COPY ./sys-stats/ /app/
+RUN npm install --loglevel verbose
+RUN grep -lr "http://localhost:5000/stats" . | xargs sed -i 's/http:\/\/localhost:5000\/stats/http:\/\/localhost:8080\/be-stats/'
+RUN npm run build
+
+# # stage 2
+#FROM nginx:1.16.0-alpine
+FROM cdue/nginx-subs-filter:latest
+COPY --from=build /app/build /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
