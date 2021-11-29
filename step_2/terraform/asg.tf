@@ -10,9 +10,9 @@ resource "aws_launch_configuration" "doc_ecs_launch_configuration" {
 
 resource "aws_autoscaling_group" "doc_ecs_autoScale_group" {
     name                      = "doc_ecs_autoScale_group"
-    desired_capacity          = 1
+    desired_capacity          = 2
     min_size                  = 1
     max_size                  = 2
     launch_configuration = aws_launch_configuration.doc_ecs_launch_configuration.name
-    vpc_zone_identifier = [aws_subnet.doc_vpc_subnet_public.id]
+    vpc_zone_identifier = [aws_subnet.doc_vpc_subnet_public.id, aws_subnet.doc_vpc_subnet2_public.id]
 }

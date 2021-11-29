@@ -1,10 +1,10 @@
-resource "aws_ecr_repository" "doc_ecr_fe"{
-    name = "doc_ecr_fe"
-}
+# resource "aws_ecr_repository" "doc_ecr_fe"{
+#     name = "doc_ecr_fe"
+# }
 
-resource "aws_ecr_repository" "doc_ecr_be"{
-    name = "doc_ecr_be"
-}
+# resource "aws_ecr_repository" "doc_ecr_be"{
+#     name = "doc_ecr_be"
+# }
 
 resource "aws_ecs_cluster" "doc_ecs_cluster"{
     name = "doc_ecs_cluster"
@@ -43,4 +43,19 @@ resource "aws_ecs_task_definition" "doc_ecs_task_defintion" {
             ]
         }
     ])
+}
+
+resource "aws_ecs_service" "doc_ecs_service"{
+    name = "doc_ecs_service"
+    task_definition = aws_ecs_task_definition.doc_ecs_task_defintion.arn
+    cluster = aws_ecs_cluster.doc_ecs_cluster.id
+    scheduling_strategy = "DAEMON"
+    load_balancer {
+        target_group_arn = aws_lb_target_group.doc_lb_target_group_fe.arn
+        container_name = "doc_ecs_service_fe"
+        container_port = 80
+    }
+    depends_on = [
+      aws_lb_listener.doc_lb_listener_80
+    ]
 }
