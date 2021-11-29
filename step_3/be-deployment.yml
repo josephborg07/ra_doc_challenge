@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: be-python
+  labels:
+    app: be-python
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: be-python
+  template:
+    metadata:
+      labels:
+        app: be-python
+    spec:
+      containers:
+      - name: be-python
+        image: devopschallenge2_be_app_k8s:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 5000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: be-service
+spec:
+  selector:
+    app: be-python
+  ports:
+    - protocol: TCP
+      port: 5000
+      targetPort: 5000
+  #     nodePort: 30003
+  # type: NodePort

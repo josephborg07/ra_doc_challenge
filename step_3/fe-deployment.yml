@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fe-nginx
+  labels:
+    app: fe-nginx
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fe-nginx
+  template:
+    metadata:
+      labels:
+        app: fe-nginx
+    spec:
+      containers:
+      - name: fe-nginx
+        image: devopschallenge2_fe_app_k8s:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: fe-service
+spec:
+  selector:
+    app: fe-nginx
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  #     nodePort: 30002
+  # type: NodePort
