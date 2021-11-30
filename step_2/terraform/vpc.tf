@@ -15,6 +15,17 @@ resource "aws_subnet" "doc_vpc_subnet_public"{
     cidr_block = "192.168.1.0/24"
     vpc_id = aws_vpc.doc_vpc.id
     map_public_ip_on_launch = true
+    availability_zone = "us-east-1c"
+    tags = {
+        env = "doc"
+    }
+}
+
+resource "aws_subnet" "doc_vpc_subnet2_public"{
+    cidr_block = "192.168.5.0/24"
+    vpc_id = aws_vpc.doc_vpc.id
+    map_public_ip_on_launch = true
+    availability_zone = "us-east-1d"
     tags = {
         env = "doc"
     }
@@ -28,8 +39,18 @@ resource "aws_route_table" "doc_vpc_routeTable" {
     }
 }
 
-resource "aws_route_table_association" "doc_vpc_routeTable_association" {
+resource "aws_route_table_association" "doc_vpc_routeTable_association1" {
     subnet_id = aws_subnet.doc_vpc_subnet_public.id
+    route_table_id = aws_route_table.doc_vpc_routeTable.id
+}
+
+resource "aws_route_table_association" "doc_vpc_routeTable_association2" {
+    subnet_id = aws_subnet.doc_vpc_subnet2_public.id
+    route_table_id = aws_route_table.doc_vpc_routeTable.id
+}
+
+resource "aws_main_route_table_association" "doc_vpc_routeTable_association1" {
+    vpc_id = aws_vpc.doc_vpc.id
     route_table_id = aws_route_table.doc_vpc_routeTable.id
 }
 
@@ -50,6 +71,14 @@ resource "aws_security_group_rule" "doc_vpc_securityGroup_rule_ingress8080" {
     type = "ingress"
     from_port = 8080
     to_port = 8080
+    protocol = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+    security_group_id = aws_security_group.doc_vpc_securityGroup.id
+}
+resource "aws_security_group_rule" "doc_vpc_securityGroup_rule_ingress80" {
+    type = "ingress"
+    from_port = 80
+    to_port = 80
     protocol = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
     security_group_id = aws_security_group.doc_vpc_securityGroup.id
