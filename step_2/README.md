@@ -49,7 +49,10 @@ Our containers will run on ECS which is backed by an auto-scale group consisting
 2. `terraform init`
 3. `terraform plan` - ensure all config is what's expected
 4. `terraform apply`
-5. point ra.doc-challenge.com to the same IPs used by the ALB's public DNS endpoint.
+5. Point ra.doc-challenge.com to the same IPs used by the ALB's public DNS endpoint.
+
+**NOTE:** The application will not work without the final step as the LB is expecting the ra.doc-challenge.com in the request's host header
+
 
 ### Long version
 
