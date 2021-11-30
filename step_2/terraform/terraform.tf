@@ -6,7 +6,7 @@ provider "aws" {
 
 terraform {
   backend "s3" {
-    bucket = "doc_tf"
+    bucket = "doc-tf"
     key    = "doc_share_state"
     region = "us-east-1"
   }
