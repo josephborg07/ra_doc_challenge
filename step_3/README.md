@@ -35,13 +35,27 @@ A service is what exposes the app running at the deployment level internall to t
 An ingest is what allows us to expose the application outside of the cluster; It simple exposes an endpoint and simply routes requests meeting the ingest's conditions to the specified service in the rule.
 
 ## Steps
-### 1. Build docker images
 
-First thing to do is create the docker images. We ensure that the FE react app fetches the content from the backend app's ingress (be-ingress.io) 
 
-### 2. Start minikube (in our case we've used the hyperv driver)
+### 1. Start minikube (in our case we've used the hyperv driver)
     
-Ensure minikube is running; In our case we use minikube's hyperv driver.
+Ensure minikube is running; In our case we use minikube's hyperv driver; on windows using hyper-v daemon:
+
+`minikube start --driver=hyperv`
+### 2. Build docker images
+
+First thing to do is create the docker images. We need to ensure that the images are pulled locally as opposed to remotely. On windows it can be achieved by executing the following:
+    
+1. executing `minikube docker-env`    
+2. executing the last command  which should look simialar to: `@FOR /f "tokens=*" %i IN ('minikube -p minikube docker-env') DO @%i`
+
+The above will make ensure that docker uses minikube's docker daemon rather than the host's
+
+The FE image responds with a file (upon request from the browser) that fetches the content from the backend app's ingress (be-ingress.io). Below are the build commands:
+
+`docker build -t devopschallenge_fe_app_k8s -f dockerfile-build-fe .`
+`docker build -t devopschallenge_be_app_k8s -f dockerfile-build-be .`
+
 ### 3. Deploy both FE and BE applications and their relevant services
 
 Deploy both FE and BE apps and their services by running `kubectl apply -f fe-deployment.yml` and `kubectl apply -f be-deployment.yml`. Both files create the deployments (and it's pods) and services to expose the deployment (and it's pods) internally for kubernetes.
