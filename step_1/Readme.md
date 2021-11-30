@@ -10,13 +10,13 @@ The 3 components of the app are:
     - Frontend: serve FE on http://localhost:8080/fe, sub_filter sytanx to change the response from the upstream FE endpoint to match the `/fe` syntax
 
 ## 2) Running the application
-The entire application is funnt dockerized and can be built by simply running `docker-compose -f docker-compose.yml up -d` in the root directory. This will take care of building both FE and BE images, creating a network named **ra_test_network** creating containers for the 3 components mentioned above (FE app, BE app and nginx proxy)
+The entire application is dockerized and can be built by simply running `docker-compose -f docker-compose.yml up -d` in the root directory. This will take care of building both FE and BE images and creating a network named **ra_test_network** which caters for the 3 components mentioned above (FE app, BE app and nginx proxy)
 
 ## 3) Building the applications
 
 Frontend build has 2 stages:
 - Stage 1:
-    1. Add the node_modules dir to the local path so that it's easily accessible by the container
+    1. Add the `node_modules` dir to the local path so that it's easily accessible by the container
     2. copying the contents of the `/sys-stats` directory to the node container
     3. Installing the dependencies
     4. Change the backend's endpoint from the react app's main App.js file
@@ -28,7 +28,7 @@ Frontend build has 2 stages:
     3. expose port 80
     4. run nginx
 
-The end result would be a containerized nginx server, serving a static react app on port 80.
+The end result would be a containerized nginx server, serving a static react app on port 80 (whilst discarding all un-necessary dependencies in order to retain a small image).
 
 
 Backend build has 1 stage:
