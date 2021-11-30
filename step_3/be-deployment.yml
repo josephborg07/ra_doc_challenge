@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: be-python
-        image: devopschallenge2_be_app_k8s:latest
+        image: devopschallenge_be_app_k8s:latest
         imagePullPolicy: Never
         ports:
         - containerPort: 5000

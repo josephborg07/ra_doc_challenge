@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: fe-nginx
-        image: devopschallenge2_fe_app_k8s:latest
+        image: devopschallenge_fe_app_k8s:latest
         imagePullPolicy: Never
         ports:
         - containerPort: 80
